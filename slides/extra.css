@@ -74,6 +74,9 @@ div.my-footer span {
 .tiny {
   font-size: 60%;
 }
+.medium {
+  font-size: 120%;
+}
 .large {
   font-size: 150%;
 }

@@ -148,7 +148,9 @@ class: inverse, middle, centre
 Undergraduate in Psychology
 
 - Statistics
-- Experiments
+- Experiment Design
+- Cognitive Theory
+- Neurology
 - Humans
 ]
 
@@ -160,7 +162,7 @@ include_graphics("imgs/psy_brain.png")
 
 ---
 
-## Background: Undergraduate
+## Background: Honours
 
 .pull-left.large[
 Psychophysics: 
@@ -180,7 +182,7 @@ include_graphics("imgs/kanizsa-triangle.png")
 
 
 .large[
-> If every psychologist in the world delivered gold standard smoking cessation therapy, and the rate of smoking would still increase. You need to change policy to make change. To make effective policy changes, you need to have good data, and do good statistics.
+> If every psychologist in the world delivered gold standard smoking cessation therapy, the rate of smoking would still increase. You need to change policy to make change. To make effective policy, you need to have good data, and do good statistics.
 ]
 
 ???
@@ -218,9 +220,9 @@ I started a PhD in statistics at QUT, under (now distinguished) Professor Kerrie
 
 .pull-left.large[
 
-- Exploring the data?
-- How???
-- What does exploring the data even mean?
+- Data is really messy
+- Missing values are frustrating
+- How to Explore data?
 
 ]
 
@@ -244,8 +246,6 @@ include_graphics("imgs/explorer.jpg")
 - But it was so critical.
 ]
 
---
-
 .pull-right[
 ```{r sound-barrier}
 include_graphics("imgs/sound-barrier.jpg")
@@ -260,7 +260,7 @@ include_graphics("imgs/sound-barrier.jpg")
 
 .large[
 - A lot of research in new statistical methods - imputation, inference, prediction
-- Not much research on how we explore our methods and behaviour.
+- Not much research on how we explore our data, and the methods that we use to do this.
 ]
 
 ---
@@ -275,12 +275,21 @@ include_graphics("imgs/bw-bridge.jpg")
 ]
 
 .pull-right.large[
-  > Focus on building a bridge across a river. No focus on **how** we build the bridge, and the **tools** used.
+  > Focus on building a bridge across a river. Less focus on **how** it is built, and the **tools** used.
 ]
 
 ???
 
 - I became very interested in how we explore our data - exploratory data analysis.
+
+---
+class: inverse, middle, center
+
+.huge[
+My research:
+
+Design and improve tools for (exploratory) data analysis
+]
 
 ---
     
@@ -289,12 +298,14 @@ include_graphics("imgs/bw-bridge.jpg")
 .large[
 > ...EDA is an approach to analyzing data sets to summarize their main characteristics, often with visual methods. (Wikipedia)
 
-Promoted by John Tukey, Frederick Mosteller, Bill Cleveland
+John Tukey, Frederick Mosteller, Bill Cleveland, Dianne Cook, Heike Hoffman, Rob Hyndman, Hadley Wickham
 ]
 
 ---
 
 # EDA: Why it's worth it
+
+--
 
 ```{r dino-saurus}
 include_graphics("gifs/dino-saurus.gif")
@@ -802,9 +813,8 @@ Look at only a sample of the data:
 
 .pull-right.large[
 ```{r ggplot-sample-keys}
-gg_sample_keys <- heights %>%
-  sample_n_keys(5) %>% 
-  gg_heights()
+heights_sample <- sample_n_keys(heights, 5)
+gg_sample_keys <- gg_heights(heights_sample)
 
 gg_sample_keys
 ```
@@ -825,8 +835,6 @@ heights %>% sample_n(5)
 
 # Sample `n` rows with `sample_n()`
 
---
-
 ```{r plot-sample-n}
 heights %>% sample_n(5) %>% gg_heights() + geom_point()
 ```
@@ -843,7 +851,7 @@ heights %>% sample_n(5)
 --
 
 .large[
-... sampling needs to select not random rows of the data, but the keys - the countries.
+... sampling needs to select not random rows of the data, but the **keys - the countries**.
 ]
 
 ---
@@ -852,11 +860,11 @@ heights %>% sample_n(5)
 # `sample_n_keys()` to sample ... **keys**
 
 ```{r show-sample-keys, echo = TRUE, eval = FALSE}
-heights %>% sample_n_keys(5)
+sample_n_keys(heights, 5)
 ```
 
 ```{r print-show-sample-keys}
-heights %>% sample_n_keys(5) %>% print(n = 6)
+heights_sample %>% print(n = 6)
 ```
 
 ---
@@ -894,6 +902,14 @@ gg_heights(heights)
 
 # Look at many subsamples
 
+```{r all-heights-samples}
+gg_sample_keys
+```
+
+---
+
+# Look at many subsamples
+
 ```{r heights-strata}
 gg_heights(heights) + 
   facet_sample()
@@ -904,9 +920,9 @@ gg_heights(heights) +
 # **How** to look at many subsamples
 
 .large[
-- How many subsamples to look at? (2, 4, ... 16?)
-- How many keys per subsample?
-  - 153 keys into 16 subsamples = 9 each
+- How many facets to look at? (2, 4, ... 16?)
+- How many keys per facets?
+  - 153 keys into 16 facets = 9 each
 - Randomly pick 16 groups of size 9.
 ]
 
@@ -948,15 +964,15 @@ How many keys are there?
 
 --
 
-How many plots do I want to look at
+How many facets do I want to look at
 
 --
 
-How many keys per plot should I look at
+How many keys per facet should I look at
 
 --
 
-How do I ensure that there are the same number of keys per plot
+How do I ensure there are the same number of keys per plot
 
 --
 
@@ -970,6 +986,8 @@ Do I want `length.out` or `times`?
 ---
 
 # Avoiding the rabbit hole
+
+--
 
 .large[
 We can blame ourselves when we are distracted for not being better.
@@ -990,7 +1008,7 @@ We need to make things as easy as reasonable, with the least amount of distracti
 
 ---
 
-# Removing the distraction threshold means asking relevant questions
+# Removing the distraction threshold means asking the most relevant question
 
 --
 
@@ -1082,6 +1100,9 @@ ggplot +
 ```
 
 ]
+
+--
+
 .pull-right[
 "How many facets to shove all the data in?"
 
@@ -1096,10 +1117,14 @@ ggplot +
 
 ---
 
-## In asking these questions we can solve something else interesting - can we re-order these facets in a meaningful way?
+## Can we re-order these facets in a meaningful way?
 
 ```{r print-gg-facet-strata-again, ref.label='gg-facet-strata'}
 ```
+
+???
+
+In asking these questions we can solve something else interesting
 
 ---
 
@@ -1153,6 +1178,22 @@ ggplot(heights,
 
 ]
 
+--
+
+
+.pull-right.medium[
+
+Store useful information
+
+View subsamples of data
+
+View many subsamples
+
+View all subsamples
+
+]
+
+
 ---
 
 ## ~~Problem #1: How do I look at some of the data?~~
@@ -1169,9 +1210,8 @@ ggplot(heights,
 
 ]
 
---
 
-.pull-right.large[
+.pull-right.medium[
 
 Store useful information
 
@@ -1514,22 +1554,12 @@ feat_five_num
 ]
 
 ---
-
-```{r show-five-num-again, echo = TRUE}
-heights %>%
-  features(height_cm,
-           feat_five_num)
-```
-
-
-
----
 class: middle, center
 # Other available `features()` in `brolgar` 
 
 ---
 
-# What is the range of the data? `feat_ranges`
+## What is the range of the data? `feat_ranges`
 
 ```{r features-feat-ranges, echo = TRUE}
 heights %>%
@@ -1538,7 +1568,7 @@ heights %>%
 
 ---
 
-# Does my data only increase or decrease? `feat_monotonic`
+## Does my data only increase or decrease? `feat_monotonic`
 
 ```{r features-feat-monotonic, echo = TRUE}
 heights %>%
@@ -1547,7 +1577,7 @@ heights %>%
 
 ---
 
-# What is the spread of my data? `feat_spread`
+## What is the spread of my data? `feat_spread`
 
 ```{r features-feat-spread, echo = TRUE}
 heights %>%
@@ -1586,8 +1616,6 @@ Such as:
 
 # ~~Problem #1: How do I look at **some** of the data?~~
 
---
-
 # ~~Problem #2: How do I find **interesting** observations?~~
 
 --
@@ -1599,10 +1627,10 @@ Such as:
 
 # Problem #3: How do I **understand** my statistical model
 
-.large[
+.medium[
 Let's fit a simple mixed effects model to the data
 
-- Fixed effect of year + Random intercept for country
+Fixed effect of year + Random intercept for country
 ]
 
 ```{r fit-lme4, echo = TRUE}
@@ -1639,7 +1667,7 @@ gg_heights_fit
 
 ---
 
-# Can we look at some subsamples?
+## Look at **some** subsamples?
 
 ```{r heights-fit-facet-sample, echo = TRUE, out.width = "70%"}
 gg_heights_fit + facet_sample()
@@ -1647,7 +1675,7 @@ gg_heights_fit + facet_sample()
 
 ---
 
-# Can we look at all subsamples?
+## Look at **all** subsamples?
 
 ```{r heights-fit-facet-strata, echo = TRUE, out.width = "70%"}
 gg_heights_fit + facet_strata()
@@ -1655,7 +1683,7 @@ gg_heights_fit + facet_strata()
 
 ---
 
-# Can we look at all subsamples arranged by residuals?
+## Look at **all subsamples** arranged by residuals?
 
 ```{r heights-fit-facet-strata-res, echo = TRUE, out.width = "70%"}
 gg_heights_fit + facet_strata(along = -res)
@@ -1692,10 +1720,18 @@ heights_sample
 
 # Look at the predictions with the data?
 
-```{r small-sample-add-real-data, echo = TRUE, out.width = "50%"}
+.left-code[
+```{r small-sample-add-real-data, eval = FALSE}
 heights_sample +
   geom_point(aes(y = height_cm))  #<< add the original data
+```  
+]
+
+.right-plot[
+```{r small-sample-add-real-data-out, ref.label = 'small-sample-add-real-data', echo = FALSE, out.width = "100%"}
+
 ```
+]
 
 ---
 
@@ -1740,7 +1776,8 @@ heights_near <- heights_aug %>%
 
 # Show data by joining it with predictions, to explore the spread of predictions.
 
-```{r plot-join-aug}
+.left-code[
+```{r plot-join-aug, eval = FALSE}
 left_join(heights_near,
           heights_aug,
           by = "country") %>%
@@ -1751,13 +1788,20 @@ left_join(heights_near,
   geom_line() + 
   geom_point(aes(y = height_cm)) + 
   facet_wrap(~country)
+```  
+]
+
+.right-plot[
+```{r plot-join-aug-out, ref.label = 'plot-join-aug', echo = FALSE, out.width = "100%"}
+
 ```
 
 ---
 
 # Take homes
 
-## Problem #1:
+## Problem #1: How do I look at **some** of the data?
+
 
 .large[
 1. Longitudinal data is a time series
@@ -1770,7 +1814,7 @@ left_join(heights_near,
 
 # Take homes
 
-## Problem #2:
+## Problem #2: How do I find **interesting** observations?
 
 .large[
 5. Summarise with `features` to find interesting observations
@@ -1782,8 +1826,14 @@ left_join(heights_near,
 
 # Take homes
 
-## Problem #3:
+## Problem #3: How do I **understand** my statistical model
 
+.large[
+1. Look at (one, more or all!) subsamples
+1. Arrange subsamples
+1. Find keys near some summary 
+1. Join keys to data to explore representatives
+]
 
 ---
 

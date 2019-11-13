@@ -51,7 +51,9 @@ class: inverse, middle, centre
 Undergraduate in Psychology
 
 - Statistics
-- Experiments
+- Experiment Design
+- Cognitive Theory
+- Neurology
 - Humans
 ]
 
@@ -61,7 +63,7 @@ Undergraduate in Psychology
 
 ---
 
-## Background: Undergraduate
+## Background: Honours
 
 .pull-left.large[
 Psychophysics: 
@@ -79,7 +81,7 @@ Studied monocular occlusion and 3D perception of edges
 
 
 .large[
-&gt; If every psychologist in the world delivered gold standard smoking cessation therapy, and the rate of smoking would still increase. You need to change policy to make change. To make effective policy changes, you need to have good data, and do good statistics.
+&gt; If every psychologist in the world delivered gold standard smoking cessation therapy, the rate of smoking would still increase. You need to change policy to make change. To make effective policy, you need to have good data, and do good statistics.
 ]
 
 ???
@@ -115,9 +117,9 @@ I started a PhD in statistics at QUT, under (now distinguished) Professor Kerrie
 
 .pull-left.large[
 
-- Exploring the data?
-- How???
-- What does exploring the data even mean?
+- Data is really messy
+- Missing values are frustrating
+- How to Explore data?
 
 ]
 
@@ -139,8 +141,6 @@ I started a PhD in statistics at QUT, under (now distinguished) Professor Kerrie
 - But it was so critical.
 ]
 
---
-
 .pull-right[
 &lt;img src="imgs/sound-barrier.jpg" width="853" style="display: block; margin: auto;" /&gt;
 
@@ -153,7 +153,7 @@ I started a PhD in statistics at QUT, under (now distinguished) Professor Kerrie
 
 .large[
 - A lot of research in new statistical methods - imputation, inference, prediction
-- Not much research on how we explore our methods and behaviour.
+- Not much research on how we explore our data, and the methods that we use to do this.
 ]
 
 ---
@@ -166,12 +166,19 @@ I started a PhD in statistics at QUT, under (now distinguished) Professor Kerrie
 ]
 
 .pull-right.large[
-  &gt; Focus on building a bridge across a river. No focus on **how** we build the bridge, and the **tools** used.
+  &gt; Focus on building a bridge across a river. Less focus on **how** it is built, and the **tools** used.
 ]
 
 ???
 
 - I became very interested in how we explore our data - exploratory data analysis.
+
+---
+class: inverse, middle, center
+
+.huge[
+My research has focussed on designing and improving tools for exploratory data analysis
+]
 
 ---
     
@@ -180,12 +187,14 @@ I started a PhD in statistics at QUT, under (now distinguished) Professor Kerrie
 .large[
 &gt; ...EDA is an approach to analyzing data sets to summarize their main characteristics, often with visual methods. (Wikipedia)
 
-Promoted by John Tukey, Frederick Mosteller, Bill Cleveland
+John Tukey, Frederick Mosteller, Bill Cleveland, Dianne Cook, Heike Hoffman, Rob Hyndman, Hadley Wickham
 ]
 
 ---
 
 # EDA: Why it's worth it
+
+--
 
 &lt;img src="gifs/dino-saurus.gif" style="display: block; margin: auto;" /&gt;
 
@@ -254,7 +263,7 @@ class: inverse, middle, center
 
 .right-plot.large[
   
-Tierney, NJ. Cook, D. "Expanding tidy data principles to facilitate missing data exploration, visualization and assessment of imputations." [Pre-print](https://arxiv.org/abs/1809.02264)
+Tierney, NJ. Cook, D. "Expanding tidy data principles to facilitate missing data exploration, visualization and assessment of imputations." [[Pre-print](https://arxiv.org/abs/1809.02264)]
 
 ]
 
@@ -649,8 +658,6 @@ heights %&gt;% sample_n(5)
 
 # Sample `n` rows with `sample_n()`
 
---
-
 &lt;img src="figures/plot-sample-n-1.png" width="936" style="display: block; margin: auto;" /&gt;
 
 
@@ -674,7 +681,7 @@ heights %&gt;% sample_n(5)
 --
 
 .large[
-... sampling method needs to select not rows of the data, but the keys - the countries.
+... sampling needs to select not random rows of the data, but the **keys - the countries**.
 ]
 
 ---
@@ -684,22 +691,22 @@ heights %&gt;% sample_n(5)
 
 
 ```r
-heights %&gt;% sample_n_keys(5)
+sample_n_keys(heights, 5)
 ```
 
 
 ```
-## # A tsibble: 44 x 4 [!]
+## # A tsibble: 35 x 4 [!]
 ## # Key:       country [5]
-##   country   year height_cm continent
-##   &lt;chr&gt;    &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;    
-## 1 Bulgaria  1880      168. Europe   
-## 2 Bulgaria  1930      172. Europe   
-## 3 Bulgaria  1940      171. Europe   
-## 4 Bulgaria  1950      173. Europe   
-## 5 Georgia   1840      166. Asia     
-## 6 Georgia   1860      163  Asia     
-## # … with 38 more rows
+##   country     year height_cm continent
+##   &lt;chr&gt;      &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;    
+## 1 Azerbaijan  1850      170. Asia     
+## 2 Azerbaijan  1860      171. Asia     
+## 3 Azerbaijan  1950      171. Asia     
+## 4 Azerbaijan  1960      172. Asia     
+## 5 Azerbaijan  1970      172. Asia     
+## 6 Azerbaijan  1980      172. Asia     
+## # … with 29 more rows
 ```
 
 ---
@@ -733,6 +740,12 @@ Look at **many** subsamples
 
 # Look at many subsamples
 
+&lt;img src="figures/all-heights-samples-1.png" width="936" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Look at many subsamples
+
 &lt;img src="figures/heights-strata-1.png" width="936" style="display: block; margin: auto;" /&gt;
 
 ---
@@ -740,9 +753,9 @@ Look at **many** subsamples
 # **How** to look at many subsamples
 
 .large[
-- How many subsamples to look at? (2, 4, ... 16?)
-- How many keys per subsample?
-  - 153 keys into 16 subsamples = 9 each
+- How many facets to look at? (2, 4, ... 16?)
+- How many keys per facets?
+  - 153 keys into 16 facets = 9 each
 - Randomly pick 16 groups of size 9.
 ]
 
@@ -784,15 +797,15 @@ How many keys are there?
 
 --
 
-How many plots do I want to look at
+How many facets do I want to look at
 
 --
 
-How many keys per plot should I look at
+How many keys per facet should I look at
 
 --
 
-How do I ensure that there are the same number of keys per plot
+How do I ensure there are the same number of keys per plot
 
 --
 
@@ -807,14 +820,16 @@ Do I want `length.out` or `times`?
 
 # Avoiding the rabbit hole
 
+--
+
 .large[
-We can look at these times where we get distracted and blame ourselves for not being better.
+We can blame ourselves when we are distracted for not being better.
 ]
 
 --
 
 .large[
-But - it is not that we should be smarter, or better, it's that **with better tools we could be that much more efficient**. 
+It's not that we should be better, rather **with better tools we could be more efficient**. 
 ]
 
 --
@@ -826,7 +841,7 @@ We need to make things as easy as reasonable, with the least amount of distracti
 
 ---
 
-# Removing the distraction threshold means you instead ask questions more directly relevant
+# Removing the distraction threshold means asking the most relevant question
 
 --
 
@@ -922,6 +937,9 @@ ggplot +
 ```
 
 ]
+
+--
+
 .pull-right[
 "How many facets to shove all the data in?"
 
@@ -937,9 +955,13 @@ ggplot +
 
 ---
 
-## In asking these questions we can solve something else interesting - can we re-order these facets in a meaningful way?
+## Can we re-order these facets in a meaningful way?
 
 &lt;img src="figures/print-gg-facet-strata-again-1.png" width="936" style="display: block; margin: auto;" /&gt;
+
+???
+
+In asking these questions we can solve something else interesting
 
 ---
 
@@ -981,7 +1003,7 @@ ggplot(heights,
 
 --
 
-.pull-left-large[
+.pull-left.large[
 
 `as_tsibble()`
 
@@ -993,7 +1015,10 @@ ggplot(heights,
 
 ]
 
-.pull-right.large[
+--
+
+
+.pull-right.medium[
 
 Store useful information
 
@@ -1005,11 +1030,12 @@ View all subsamples
 
 ]
 
+
 ---
 
 ## ~~Problem #1: How do I look at some of the data?~~
 
-.large[
+.pull-left.large[
 
 `as_tsibble()`
 
@@ -1018,6 +1044,19 @@ View all subsamples
 `facet_sample()`
 
 `facet_strata()`
+
+]
+
+
+.pull-right.medium[
+
+Store useful information
+
+View subsamples of data
+
+View many subsamples
+
+View all subsamples
 
 ]
 
@@ -1287,40 +1326,12 @@ feat_five_num
 ]
 
 ---
-
-
-```r
-heights %&gt;%
-  features(height_cm,
-           feat_five_num)
-```
-
-```
-## # A tibble: 153 x 6
-##    country       min   q25   med   q75   max
-##    &lt;chr&gt;       &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-##  1 Afghanistan  161.  164.  167.  168.  168.
-##  2 Albania      168.  168.  170.  170.  170.
-##  3 Algeria      166.  168.  169   170.  171.
-##  4 Angola       159.  160.  167.  168.  169.
-##  5 Argentina    167.  168.  168.  170.  174.
-##  6 Armenia      164.  166.  169.  172.  172.
-##  7 Australia    170   171.  172.  173.  178.
-##  8 Austria      162.  164.  167.  169.  179.
-##  9 Azerbaijan   170.  171.  172.  172.  172.
-## 10 Bahrain      161.  161.  164.  164.  164 
-## # … with 143 more rows
-```
-
-
-
----
 class: middle, center
 # Other available `features()` in `brolgar` 
 
 ---
 
-# What is the range of the data? `feat_ranges`
+## What is the range of the data? `feat_ranges`
 
 
 ```r
@@ -1347,7 +1358,7 @@ heights %&gt;%
 
 ---
 
-# Does my data only increase or decrease? `feat_monotonic`
+## Does my data only increase or decrease? `feat_monotonic`
 
 
 ```r
@@ -1374,7 +1385,7 @@ heights %&gt;%
 
 ---
 
-# What is the spread of my data? `feat_spread`
+## What is the spread of my data? `feat_spread`
 
 
 ```r
@@ -1416,6 +1427,21 @@ Such as:
 
 --
 
+# Problem #2: How do I find **interesting** observations?
+
+--
+
+.large[
+- Decide what features are interesting
+- Summarise down to one observation
+- Decide how to filter 
+- Join this feature back to the data
+]
+
+---
+
+# ~~Problem #1: How do I look at **some** of the data?~~
+
 # ~~Problem #2: How do I find **interesting** observations?~~
 
 --
@@ -1427,11 +1453,10 @@ Such as:
 
 # Problem #3: How do I **understand** my statistical model
 
-.large[
+.medium[
 Let's fit a simple mixed effects model to the data
 
-- Fixed effect of year
-- Random intercept for each country
+Fixed effect of year + Random intercept for country
 ]
 
 
@@ -1475,36 +1500,36 @@ heights_aug &lt;- heights %&gt;%
 
 ---
 
-# Can we look at some subsamples?
+## Look at **some** subsamples?
 
 
 ```r
 gg_heights_fit + facet_sample()
 ```
 
-&lt;img src="figures/heights-fit-facet-sample-1.png" width="80%" style="display: block; margin: auto;" /&gt;
+&lt;img src="figures/heights-fit-facet-sample-1.png" width="70%" style="display: block; margin: auto;" /&gt;
 
 ---
 
-# Can we look at all subsamples?
+## Look at **all** subsamples?
 
 
 ```r
 gg_heights_fit + facet_strata()
 ```
 
-&lt;img src="figures/heights-fit-facet-strata-1.png" width="936" style="display: block; margin: auto;" /&gt;
+&lt;img src="figures/heights-fit-facet-strata-1.png" width="70%" style="display: block; margin: auto;" /&gt;
 
 ---
 
-# Can we look at all subsamples arranged by residuals?
+## Look at **all subsamples** arranged by residuals?
 
 
 ```r
 gg_heights_fit + facet_strata(along = -res)
 ```
 
-&lt;img src="figures/heights-fit-facet-strata-res-1.png" width="936" style="display: block; margin: auto;" /&gt;
+&lt;img src="figures/heights-fit-facet-strata-res-1.png" width="70%" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -1513,12 +1538,14 @@ gg_heights_fit + facet_strata(along = -res)
 .left-code[
 
 ```r
+set.seed(2019-11-13)
 heights_sample &lt;- 
 heights_aug %&gt;%
   sample_n_keys(size = 9) %&gt;% #&lt;&lt; sample the data
-  ggplot(aes(x = year,
-             y = pred,
-             group = country)) + 
+  ggplot(aes(
+    x = year,
+    y = pred,
+    group = country)) + 
   geom_line() +
   facet_wrap(~country)
 
@@ -1534,17 +1561,16 @@ heights_sample
 
 # Look at the predictions with the data?
 
+.left-code[
 
-```r
-heights_sample +
-  geom_point(aes(y = height_cm))  #&lt;&lt; add the original data
-```
+]
 
-&lt;img src="figures/small-sample-add-real-data-1.png" width="936" style="display: block; margin: auto;" /&gt;
+.right-plot[
+&lt;img src="figures/small-sample-add-real-data-out-1.png" width="100%" style="display: block; margin: auto;" /&gt;
 
 ---
 
-# What if we grabbed a sample of those who have the best, middle, and worst residuals?  Which countries are **nearest** to these statistics?
+# What if we grabbed a sample of those who have the best, middle, and worst residuals? 
 
 --
 
@@ -1558,6 +1584,12 @@ summary(heights_aug$res)
 ##  -8.167  -1.614  -0.157   0.000   1.352  12.174
 ```
 
+--
+
+.large[
+Which countries are **nearest** to these statistics?
+]
+
 ---
 
 # use `keys_near()`
@@ -1565,11 +1597,9 @@ summary(heights_aug$res)
 .pull-left[
 
 ```r
-heights_near &lt;- heights_aug %&gt;%
+heights_aug %&gt;%
   keys_near(key = country,
             var = res)
-
-heights_near
 ```
 
 ```
@@ -1585,6 +1615,7 @@ heights_near
 ]
 
 .pull-right[
+
 
 &gt; This shows us the keys that closely match the five number summary. 
 
@@ -1741,11 +1772,6 @@ Anscombe's quartet
 
 
 The steps are:
-
-  - Summarise down to one observation
-  - Identify important features
-  - Decide how to filter 
-  - Join this feature back to the data
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
