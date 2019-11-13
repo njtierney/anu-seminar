@@ -65,13 +65,16 @@ Undergraduate in Psychology
 
 ## Background: Honours
 
-.pull-left.large[
-Psychophysics: 
+.left-code.medium[
+Psychophysics: illusory contours in 3D
 
-Studied monocular occlusion and 3D perception of edges 
+&lt;img src="imgs/phil-grove.jpeg" width="50%" style="display: block; margin: auto;" /&gt;
+
+Phil Grove
+
 ]
 
-.pull-right[
+.right-plot[
 &lt;img src="imgs/kanizsa-triangle.png" width="444" style="display: block; margin: auto;" /&gt;
 ]
 
@@ -79,8 +82,14 @@ Studied monocular occlusion and 3D perception of edges
 
 ## Background: Undergraduate
 
+.left-code.medium[
+&lt;img src="imgs/christina-lee.jpeg" width="50%" style="display: block; margin: auto;" /&gt;
 
-.large[
+Christina Lee
+
+]
+
+.right-plot.medium[
 &gt; If every psychologist in the world delivered gold standard smoking cessation therapy, the rate of smoking would still increase. You need to change policy to make change. To make effective policy, you need to have good data, and do good statistics.
 ]
 
@@ -158,7 +167,7 @@ I started a PhD in statistics at QUT, under (now distinguished) Professor Kerrie
 
 ---
 
-## My (personal) motivation
+## (My personal) motivation
 
 .pull-left[
 &lt;img src="imgs/bw-bridge.jpg" width="2560" style="display: block; margin: auto;" /&gt;
@@ -177,7 +186,9 @@ I started a PhD in statistics at QUT, under (now distinguished) Professor Kerrie
 class: inverse, middle, center
 
 .huge[
-My research has focussed on designing and improving tools for exploratory data analysis
+My research:
+
+Design and improve tools for (exploratory) data analysis
 ]
 
 ---
@@ -243,14 +254,14 @@ class: inverse, middle, center
 
 ## `visdat::vis_dat(airquality)`
 
-&lt;img src="figures/show-visdat-1.png" width="936" style="display: block; margin: auto;" /&gt;
+&lt;img src="figures/show-visdat-1.png" width="150%" style="display: block; margin: auto;" /&gt;
 
 
 ---
 
 ## `visdat::vis_miss(airquality)`
 
-&lt;img src="figures/show-vis-miss-1.png" width="936" style="display: block; margin: auto;" /&gt;
+&lt;img src="figures/show-vis-miss-1.png" width="150%" style="display: block; margin: auto;" /&gt;
 
 
 ---
@@ -271,14 +282,14 @@ Tierney, NJ. Cook, D. "Expanding tidy data principles to facilitate missing data
 
 ## `naniar::gg_miss_var(airquality)`
 
-&lt;img src="figures/gg-miss-var-1.png" width="936" style="display: block; margin: auto;" /&gt;
+&lt;img src="figures/gg-miss-var-1.png" width="150%" style="display: block; margin: auto;" /&gt;
 
 
 ---
 
 ## `naniar::gg_miss_upset(airquality)`
 
-&lt;img src="figures/gg-miss-upset-1.png" width="936" style="display: block; margin: auto;" /&gt;
+&lt;img src="figures/gg-miss-upset-1.png" width="150%" style="display: block; margin: auto;" /&gt;
 
 ---
 class: middle, center, inverse
@@ -1563,10 +1574,18 @@ heights_sample
 
 .left-code[
 
+```r
+heights_sample +
+  geom_point(
+    aes(
+      y = height_cm #&lt;&lt; add the original data
+      ))  
+```
 ]
 
 .right-plot[
 &lt;img src="figures/small-sample-add-real-data-out-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+]
 
 ---
 
@@ -1625,13 +1644,32 @@ heights_aug %&gt;%
 
 # Show data by joining it with predictions, to explore the spread of predictions.
 
-&lt;img src="figures/plot-join-aug-1.png" width="936" style="display: block; margin: auto;" /&gt;
+.left-code[
+
+```r
+left_join(heights_near,
+          heights_aug,
+          by = "country") %&gt;%
+  ggplot(aes(x = year,
+             y = pred,
+             group = country,
+             colour = stat)) + 
+  geom_line() + 
+  geom_point(aes(y = height_cm)) + 
+  facet_wrap(~country)
+```
+]
+
+.right-plot[
+&lt;img src="figures/plot-join-aug-out-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+]
 
 ---
 
 # Take homes
 
-## Problem #1:
+## Problem #1: How do I look at **some** of the data?
+
 
 .large[
 1. Longitudinal data is a time series
@@ -1644,7 +1682,7 @@ heights_aug %&gt;%
 
 # Take homes
 
-## Problem #2:
+## Problem #2: How do I find **interesting** observations?
 
 .large[
 5. Summarise with `features` to find interesting observations
@@ -1656,8 +1694,14 @@ heights_aug %&gt;%
 
 # Take homes
 
-## Problem #3:
+## Problem #3: How do I **understand** my statistical model
 
+.large[
+1. Look at (one, more or all!) subsamples
+1. Arrange subsamples
+1. Find keys near some summary 
+1. Join keys to data to explore representatives
+]
 
 ---
 
@@ -1740,38 +1784,6 @@ heights_aug %&gt;%
 # EDA: Why it's worth it
 
 Anscombe's quartet
-
-.pull-left[
-&lt;img src="figures/anscombe-plot-1.png" width="936" style="display: block; margin: auto;" /&gt;
-]
-
-.pull-right[
-
-```
-## # A tibble: 4 x 12
-## # Groups:   set [4]
-##   set   r.squared adj.r.squared sigma statistic p.value    df logLik   AIC
-##   &lt;chr&gt;     &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;int&gt;  &lt;dbl&gt; &lt;dbl&gt;
-## 1 1         0.667         0.629  1.24      18.0 0.00217     2  -16.8  39.7
-## 2 2         0.666         0.629  1.24      18.0 0.00218     2  -16.8  39.7
-## 3 3         0.666         0.629  1.24      18.0 0.00218     2  -16.8  39.7
-## 4 4         0.667         0.630  1.24      18.0 0.00216     2  -16.8  39.7
-## # … with 3 more variables: BIC &lt;dbl&gt;, deviance &lt;dbl&gt;, df.residual &lt;int&gt;
-```
-
-```
-## # A tibble: 4 x 7
-##   set   x_mean y_mean  x_sd  y_sd x_var y_var
-##   &lt;chr&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-## 1 1          9   7.50  3.32  2.03    11  4.13
-## 2 2          9   7.50  3.32  2.03    11  4.13
-## 3 3          9   7.5   3.32  2.03    11  4.12
-## 4 4          9   7.50  3.32  2.03    11  4.12
-```
-]
-
-
-The steps are:
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

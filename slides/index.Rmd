@@ -164,13 +164,18 @@ include_graphics("imgs/psy_brain.png")
 
 ## Background: Honours
 
-.pull-left.large[
-Psychophysics: 
+.left-code.medium[
+Psychophysics: illusory contours in 3D
 
-Studied monocular occlusion and 3D perception of edges 
+```{r phil-grove, out.width = "50%"}
+include_graphics("imgs/phil-grove.jpeg")
+```
+
+Phil Grove
+
 ]
 
-.pull-right[
+.right-plot[
 ```{r kanizsa-triangle}
 include_graphics("imgs/kanizsa-triangle.png")
 ```
@@ -180,8 +185,16 @@ include_graphics("imgs/kanizsa-triangle.png")
 
 ## Background: Undergraduate
 
+.left-code.medium[
+```{r christina-lee, out.width = "50%"}
+include_graphics("imgs/christina-lee.jpeg")
+```
 
-.large[
+Christina Lee
+
+]
+
+.right-plot.medium[
 > If every psychologist in the world delivered gold standard smoking cessation therapy, the rate of smoking would still increase. You need to change policy to make change. To make effective policy, you need to have good data, and do good statistics.
 ]
 
@@ -265,7 +278,7 @@ include_graphics("imgs/sound-barrier.jpg")
 
 ---
 
-## My (personal) motivation
+## (My personal) motivation
 
 .pull-left[
 ```{r bw-bridge}
@@ -360,7 +373,7 @@ include_graphics("imgs/hex-visdat.png")
 
 ## `visdat::vis_dat(airquality)`
 
-```{r show-visdat}
+```{r show-visdat, fig.height = 3.5, fig.width = 8, out.width = "150%"}
 vis_dat(airquality)
 ```
 
@@ -369,7 +382,7 @@ vis_dat(airquality)
 
 ## `visdat::vis_miss(airquality)`
 
-```{r show-vis-miss}
+```{r show-vis-miss, fig.height = 3.5, fig.width = 8, out.width = "150%"}
 vis_miss(airquality)
 ```
 
@@ -394,7 +407,7 @@ Tierney, NJ. Cook, D. "Expanding tidy data principles to facilitate missing data
 
 ## `naniar::gg_miss_var(airquality)`
 
-```{r gg-miss-var}
+```{r gg-miss-var, fig.height = 3.5, fig.width = 8, out.width = "150%"}
 gg_miss_var(airquality)
 ```
 
@@ -403,7 +416,7 @@ gg_miss_var(airquality)
 
 ## `naniar::gg_miss_upset(airquality)`
 
-```{r gg-miss-upset}
+```{r gg-miss-upset, fig.height = 3.5, fig.width = 8, out.width = "150%"}
 gg_miss_upset(airquality)
 ```
 
@@ -1721,9 +1734,12 @@ heights_sample
 # Look at the predictions with the data?
 
 .left-code[
-```{r small-sample-add-real-data, eval = FALSE}
+```{r small-sample-add-real-data, eval = FALSE, echo = TRUE}
 heights_sample +
-  geom_point(aes(y = height_cm))  #<< add the original data
+  geom_point(
+    aes(
+      y = height_cm #<< add the original data
+      ))  
 ```  
 ]
 
@@ -1777,7 +1793,7 @@ heights_near <- heights_aug %>%
 # Show data by joining it with predictions, to explore the spread of predictions.
 
 .left-code[
-```{r plot-join-aug, eval = FALSE}
+```{r plot-join-aug, eval = FALSE, echo = TRUE}
 left_join(heights_near,
           heights_aug,
           by = "country") %>%
@@ -1795,6 +1811,7 @@ left_join(heights_near,
 ```{r plot-join-aug-out, ref.label = 'plot-join-aug', echo = FALSE, out.width = "100%"}
 
 ```
+]
 
 ---
 
@@ -1916,44 +1933,3 @@ left_join(heights_near,
 # EDA: Why it's worth it
 
 Anscombe's quartet
-
-.pull-left[
-```{r anscombe-plot}
-tidy_anscombe <- anscombe %>% 
-  pivot_longer(everything(), 
-    names_to = c(".value", "set"), 
-    names_pattern = "(.)(.)"
-  ) %>% 
-  arrange(set)
-
-ggplot(tidy_anscombe,
-       aes(x = x,
-           y = y)) + 
-  geom_point(colour = nipa$orange) + 
-  geom_smooth(method = "lm",
-              se = FALSE,
-              colour = nipa$light_purple) + 
-  facet_wrap(~set)
-```
-]
-
-.pull-right[
-```{r anscombe-table}
-tidy_anscombe %>% 
-  group_by(set) %>% 
-  nest() %>% 
-  mutate(fit = map(data, ~lm(y~x, .x)),
-         glance = map(fit, glance)) %>% 
-  select(set, glance) %>% 
-  unnest()
-
-tidy_anscombe %>% 
-  group_by(set) %>% 
-  summarise_all(list(mean = mean, sd = sd, var = var))
-  
-```
-]
-
-
-The steps are:
-
